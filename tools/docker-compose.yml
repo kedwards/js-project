@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  api:
+    image: node:17-alpine
+    container_name: api
+    working_dir: /home/node/api/
+    ports:
+      - 3001:3001
+    environment:
+      PORT: 3001
+    volumes:
+      - ../api:/home/node/api
+      - ./data/yarn/api:/home/node/api/.yarn
+      - ./data/node/api/node_modules:/home/node/api/node_modules
+    command: npm start
+    networks:
+      - backend
+
+  web:
+    image: node:17-alpine
+    container_name: web
+    working_dir: /home/node/web/
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+    volumes:
+      - ../web:/home/node/web
+      - ./data/web/yarn:/home/node/web/.yarn
+      - ./data/web/node_modules:/home/node/web/node_modules
+    working_dir: /home/node/web/
+    command: yarn start
+    networks:
+      - frontend
+
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true

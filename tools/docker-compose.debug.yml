@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  web:
+    extends:
+      file: docker-compose.yml
+      service: web
+    ports:
+      - '3000:3000'
+      - '9230:9229'
+
+  api:
+    extends:
+      file: docker-compose.yml
+      service: api
+    ports:
+      - '3001:3001'
+      - '9229:9229'
+    command: yarn run debug
+
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true

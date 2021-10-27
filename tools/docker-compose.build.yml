@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  api-base: &api-base
+    image: node:17-alpine
+    volumes:
+      - ../api:/home/node/api
+      - ./data/yarn/api:/home/node/api/.yarn
+      - ./data/node/api/node_modules:/home/node/api/node_modules
+    working_dir: /home/node/api/
+
+  api-init:
+    image: node:17-alpine
+    volumes:
+      - ../api:/home/node/api
+      - ./data/yarn/api:/home/node/api/.yarn
+      - ./data/node/api/node_modules:/home/node/api/node_modules
+      - ./scripts/api-init.sh:/home/node/api/api-init.sh
+    working_dir: /home/node/api/
+    command: sh api-init.sh ${CMD}
+
+  api:
+    <<: *api-base
+    command: ${CMD}
+
+  web-base: &web-base
+    image: node:17-alpine
+    volumes:
+      - ../web:/home/node/web
+      - ./data/web/yarn:/home/node/web/.yarn
+      - ./data/web/node_modules:/home/node/web/node_modules
+    working_dir: /home/node/web/
+
+  web-init:
+    image: node:17-alpine
+    volumes:
+      - ../web:/home/node/web
+      - ./data/web/yarn:/home/node/web/.yarn
+      - ./data/web/node_modules:/home/node/web/node_modules
+      - ./scripts/web-init.sh:/home/node/web/web-init.sh
+    working_dir: /home/node/web/
+    command: sh /home/node/web/web-init.sh ${CMD}
+
+  web:
+    <<: *web-base
+    command: ${CMD}
