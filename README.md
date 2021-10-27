@@ -1,4 +1,6 @@
-# RTLS-META
+# js-project
+
+A meta reposiotry for js projects.
 
 ## Initilization
 
